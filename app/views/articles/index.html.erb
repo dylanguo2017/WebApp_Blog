@@ -1,0 +1,57 @@
+  
+
+       <div class="row">
+          <div class="col-md-4">
+            <h2>Heading</h2>
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2>Heading</h2>
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2>Heading</h2>
+            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          </div>
+        </div>
+
+        <hr>
+
+
+
+
+<a class="btn btn-primary" href="#"> Test</a>
+
+
+
+<br>
+
+<h1 align="center">Article List</h1>
+<hr>
+<table border="5" align="center">
+	<tr>
+		<th>Article title</th>
+		<th>Author</th>
+		<th>Description</th>
+		<th>Edit</th>
+		<th>Delete</th>
+	</tr>
+	<% @article.each do |article| %>
+	<tr>
+		<td>		<%= link_to "#{article.title}" , article_path(article.id) %></td>
+		<td>		<%= article.author %></td>
+		<td>		<%= article.description %></td>
+		<td>		<%= link_to "edit" , edit_article_path(article.id) %></td>
+		<td>		<%= link_to "delete" , article_path(article.id) , method: :delete , data: {confirm: "Are you sure to delete this article? "} %></td>
+	</tr>
+	<% end %>
+</table>
+
+    <% if user_signed_in? %>
+      <h3><u>   <%= link_to "Add a new article" , new_article_path %></u></h3>
+    <% end %>
+
+		
