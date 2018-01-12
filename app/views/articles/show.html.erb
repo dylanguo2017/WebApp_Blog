@@ -1,51 +1,83 @@
 
+<div class="row">
+	<div class="col-md-4">
+		<%= image_tag @target.article_img.url(:article_show) , class: "show" %>
+	</div>
+	
+	<div class="col-md-8">
+		<h3 align="center">Content</h3>
 
-<h3 align="center">Content</h3>
-<p>
-	<b>Title</b>
-			<%= @target.title %>
-</p>
-<p>
-	<b>Author</b>
-			<%= @target.author %>
-</p>
-<p>
-	<b>Description</b>
-			<%= @target.description %>
-</p>
+		<div class="content1">
+			<p>
+				<b>Title: </b>
+						<%= @target.title %>
+			</p>
+			<p>
+				<b>Author: </b>
+						<%= @target.author %>
+			</p>
+			<p>
+				<b>Description: </b>
+						<%= @target.description %>
+			</p>	
+			<p>
+				<b>Category: </b> 
+					 <%= @target.category.name %>
+			</p>		
+		</div>
+	</div>
+</div>
+
 <hr>
 <h3 align="center"> Comments: </h3>
-			<% @target.comments.each do |comment| %>
-				<p>
-							Commenter: <%= comment.commenter %>
-				</p>
-				<p>
-							Body: <%= comment.body %>
-				</p>
-					<span align="right"> 		<%= link_to "Delete this comment" , [comment.article,comment] , method: :delete , data: {confirm: "Are you sure? "} %></span>	
-				<hr>
+<div class="content1">
+	<% @target.comments.each do |comment| %>
+		<p>
+			Commenter: <%= comment.commenter %>
+		</p>
+		<p>
+			Body: <%= comment.body %>
+		</p>
+		<% if user_signed_in? %>
+			<% if @target.user_id == current_user.id %>
+				<%= link_to "Delete this comment" , [comment.article,comment] , method: :delete , data: {confirm: "Are you sure? "} %>
 			<% end %>
+		<% end %>
+		<hr>
+	<% end %>
+</div>
 
-<h4><u>		<%= link_to "Back to home page" , articles_path %></u></h4>
-<h4><u>		<%= link_to "Edit this article" , edit_article_path(@target) %></u></h4>
-<h4><u>		<%= link_to "Delete this article" , article_path(@target) , method: :delete, data: {confirm: "Are you sure to delete this article? "} %></u></h4>
+<div >
+	<% if user_signed_in? %>
+		<h3>Add a commnet:</h3> <br>
+		<%= form_for ([@target , @target.comments.build])  do  |f| %>
+			<p>
+					<%= f.label :commenter %> <br>
+					<%= f.text_field :commenter %>
+			</p>
+			<p>
+					<%= f.label :body %> <br>
+					<%= f.text_area :body %>
+			</p>
+			<p>
+						<%= f.submit %>
+			</p>
+		<% end %>
+
+	<% end %>
+</div>
 
 <hr>
 
-<% if user_signed_in? %>
-	<h3>Add a commnet:</h3> <br>
-	<%= form_for ([@target , @target.comments.build])  do  |f| %>
-		<p>
-				<%= f.label :commenter %> <br>
-				<%= f.text_field :commenter %>
-		</p>
-		<p>
-				<%= f.label :body %> <br>
-				<%= f.text_area :body %>
-		</p>
-		<p>
-					<%= f.submit %>
-		</p>
-	<% end %>
+<h4><u>		<%= link_to "Back to home page" , articles_path %></u></h4>
 
+
+<% if user_signed_in? %>
+		<!-- there is a problem of the conditional statement below, when no user signed in,
+	the current_user.id will return null, rails treat this as an no method error. the comparation
+	is legal only when there is a current user. -->
+	<% if @target.user_id == current_user.id %>
+		<h4><u>		<%= link_to "Edit this article" , edit_article_path(@target) %></u></h4>
+		<h4><u>		<%= link_to "Delete this article" , article_path(@target) , method: :delete, data: {confirm: "Are you sure to delete this article? "} %></u></h4>
+	<% end %>
 <% end %>

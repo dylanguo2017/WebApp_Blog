@@ -13,6 +13,7 @@
 				<div class="navbar-header">
 					<%= link_to "Dylan's Blog" , articles_path , class: "navbar-brand" %>	
 				</div>
+
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 								<%= link_to "Sign Up" , new_user_registration_path %>
@@ -28,7 +29,6 @@
 					<% end  %>
 					
 				</ul>
-
 				<ul class="nav navbar-nav">
 						<% if user_signed_in? %>
 							<li>
@@ -36,21 +36,34 @@
 							</li>
 						<% end %>
 				</ul>
-				
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Category <span class="caret"></span>	
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<% Category.all.each do |cate| %>
+								<li>
+									<%= link_to cate.name , articles_path(category: cate.name) , class: "link" %>
+								</li>
+							<% end %>
+						</ul>
+					</li>
+					
+				</ul>	
 			</div>
 		</nav>
 
-		<p class="notice"><%= notice %></p>
-	    <p class="alert"><%= alert %></p>
+		<p class="notice"> <b><%= notice %></b></p>
+	    <p class="alert"> <b><%= alert %></b></p>
 
-	    <%= render 'shared/jumbotron' %>
+	    <!-- <%= render 'shared/jumbotron' %> -->
 
-	    <main role="main">
+	   
 	      <!-- Main jumbotron for a primary marketing message or call to action -->
 	      <div class="container">
 	      	<%= yield %>
 	      </div> 
-	    </main>
+	    
 
 	    <%= render 'shared/footer' %>
 

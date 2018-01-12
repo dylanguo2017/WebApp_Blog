@@ -1,12 +1,21 @@
 class ArticlesController < ApplicationController
+
+
   def index
-  	@article=Article.all
+    if params[:category].blank?
+      @article=Article.all.order("created_at DESC")
+    else
+      @category_id = Category.find_by(name: params[:category]).id
+      @article=Article.where(:category_id => @category_id).order("created_at DESC")
+    end
+  	
   end
 
 
   def new
   	#@article = Article.new
     @article= current_user.articles.build
+    @category = Category.all.map{ |c| [c.name , c.id ]}
   end
 
   def create
@@ -17,11 +26,16 @@ class ArticlesController < ApplicationController
   	#	render "new"
   	#end
     @article= current_user.articles.build(article_params)
-    if @article.save
+    # this :category_id is from the select_tag which is a kind of form
+    @article.category_id = params[:category_id] 
+    # only when .save method is called , the model checks the validation and when true is
+    # returned, the database will be updated
+    if @article.save  
       redirect_to @article
     else
       render 'new'
     end
+
   end
 
   # for edit action, first locate the target article, then direct to the edit view which will 
@@ -43,6 +57,7 @@ class ArticlesController < ApplicationController
 
   def show
   	@target= Article.find(params[:id])
+   
   end
 
 
@@ -56,8 +71,9 @@ class ArticlesController < ApplicationController
 
   private 
   	def article_params
-  		params.require(:article).permit(:title , :author , :description)
+  		params.require(:article).permit(:title , :author , :description, :category_id ,:article_img)
   	end
   	# the argument for require is the object from form_for
 
 end
+
